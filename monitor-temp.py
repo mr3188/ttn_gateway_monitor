@@ -20,10 +20,20 @@ def measure_temp():
 
       print('Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(box_temp, humidity))
       payload=json.dumps(data)
-      publish.single("ttn-gateway/temp", payload=payload, hostname="192.168.1.31", client_id="ttn-gateway")
+     
+      try:
+            publish.single("ttn-gateway/temp", payload=payload, hostname="192.168.1.31", client_id="ttn-gateway")
+      except:
+            print("unable to publish mqtt message", sys.exc_info()[0])
+
+try:
+      publish.single("ttn-gateway/stats", payload="starting", hostname="192.168.1.31", client_id="ttn-gateway")
+except:
+      print("unable to publish mqtt message", sys.exc_info()[0])
+
 while True:
       measure_temp()
-      time.sleep(1800)
+      time.sleep(60*5)
 
 
 
