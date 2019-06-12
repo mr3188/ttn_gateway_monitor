@@ -7,7 +7,9 @@ import Adafruit_DHT
 import json
 import socket
 
-
+hostname=socket.gethostname()
+mqtt_server=""
+DHT_Pin = 23
 
 def measure_temp():
       temp = os.popen("vcgencmd measure_temp").readline()
@@ -15,7 +17,7 @@ def measure_temp():
       temp = temp.replace("'C","")
       fTemp = float(temp)
       print(temp)
-      humidity, box_temp = Adafruit_DHT.read_retry(11, 23)
+      humidity, box_temp = Adafruit_DHT.read_retry(11, DHT_Pin)
 
       data={}
       data["cpu_temp"]=fTemp
@@ -35,12 +37,12 @@ def send_state(state="running"):
       try:
             publish.single(hostname+"/status/state", payload=state, retain=True, hostname=mqtt_server, client_id=hostname, )
       except:
-            print("unable to publish mqtt message", sys.exc_info()[0])
+            print("Error nable to publish mqtt message", sys.exc_info()[0])
 
 
 
 path = os.path.dirname(os.path.abspath(__file__))
-hostname=socket.gethostname()
+
 
 # configuration
 config = ConfigParser.ConfigParser()
@@ -51,6 +53,9 @@ try:
 
       mqtt_server=config.get("mqtt", "mqtt_server")
       DHT_Pin=config.getint("DHT11", "DHT_Pin")
+
+      print("mqtt_server = "+mqtt_server)
+      print("DHT_PIN = "+ DHT_Pin)
       
 except:
       send_state("Error reading config file ")
