@@ -1,0 +1,7 @@
+
+
+[mqtt]
+mqtt_server = <server_name>
+
+[DHT11]
+DHT_pin = 23
