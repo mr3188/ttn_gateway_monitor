@@ -48,14 +48,14 @@ path = os.path.dirname(os.path.abspath(__file__))
 config = ConfigParser.ConfigParser()
 
 try:
-      configFilePath= path + '/getBandwidth.conf'
+      configFilePath= path + '/gw-monitor.conf'
       config.read(configFilePath)
 
       mqtt_server=config.get("mqtt", "mqtt_server")
       DHT_Pin=config.getint("DHT11", "DHT_Pin")
 
       print("mqtt_server = "+mqtt_server)
-      print("DHT_PIN = "+ DHT_Pin)
+      print("DHT_PIN = "+ str(DHT_Pin))
       
 except:
       send_state("Error reading config file ")
